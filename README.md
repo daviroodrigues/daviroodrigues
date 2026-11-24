@@ -36,6 +36,14 @@ Desenvolvedor **Full-Stack** com foco em **arquitetura backend em Go**, **sistem
   - **Segurança, Criptografia e Startup Fail-Fast:** Separação entre chave administrativa mestre (`X-Internal-Key`) e chaves de clientes (`X-API-Key` exibidas uma única vez e persistidas com hash **Argon2id**), credenciais sensíveis cifradas em repouso no SQLite com **AES-256-GCM** e validação estrita de ambiente sem fallbacks silenciosos.
   - **Backup Zero-Disk-Secret (GFS + OpenGPG):** Snapshots a quente do SQLite com retenção *Grandfather-Father-Son*, criptografia assimétrica OpenGPG mantendo apenas a chave pública no servidor e sincronização automatizada com qualquer **Object Storage compatível com S3** (AWS S3, Cloudflare R2, MinIO, etc.).
 
+### [Anker C200 Control | Interface Nativa Linux para Webcam Anker PowerConf C200](https://github.com/daviroodrigues/anker-c200-ui)
+*Aplicação desktop em Tauri, Rust e C11 que leva paridade total com o software oficial do fabricante ao Linux, integrando controle direto de hardware V4L2/UVC com preview em tempo real.*
+- **Stack:** Rust, C11 (V4L2 / UVC), Tauri, HTML5, CSS3, JavaScript (ES6+), WebRTC, Linux.
+- **Engenharia e Decisões Arquiteturais:**
+  - **Camada de Driver em C11 + FFI em Rust:** Mapeamento de extensões UVC (*Extension Units*) e chamadas `ioctl` diretas sobre `/dev/video*` vinculadas ao núcleo **Tauri/Rust** via `cc`, expandindo os controles originais do projeto base [`anker-powerconf-c200-linux-tools`](https://github.com/erans/anker-powerconf-c200-linux-tools) a partir de análise de tráfego USB.
+  - **Fila de Comandos IPC & Sincronização Bidirecional:** Execução serializada entre front-end e backend para evitar *race conditions* no driver do kernel, com leitura inicial do estado real do hardware (`get_camera_control`) e resolução automática de dependências entre modos automáticos e manuais.
+  - **Front-end Enxuto e Live Preview WebRTC:** Interface sem dependência de frameworks pesados com monitor em tempo real via `getUserMedia`, controles ePTZ digitais, presets de FOV/resolução (até 2K) e empacotamento nativo para Linux (`.deb` e `AppImage`).
+
 ### Infraestrutura Linux, Containers e Segurança de Borda
 *Provisionamento, isolamento e operação de servidores para aplicações web e APIs.*
 - **Stack:** Linux (Ubuntu), Docker (Rootless), Cloudflare, AWS (S3).
@@ -49,9 +57,12 @@ Desenvolvedor **Full-Stack** com foco em **arquitetura backend em Go**, **sistem
 
 ### Linguagens & Frameworks
 ![Go](https://img.shields.io/badge/Go-00ADD8?logo=Go&logoColor=white&style=for-the-badge)
+![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
+![C](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
 ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![Tauri](https://img.shields.io/badge/Tauri-24C8D8?style=for-the-badge&logo=tauri&logoColor=white)
 ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
 ![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)

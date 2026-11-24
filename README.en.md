@@ -36,6 +36,14 @@
   - **Security, Cryptography & Fail-Fast Startup:** Separation between master admin key (`X-Internal-Key`) and client keys (`X-API-Key`, shown once and stored with **Argon2id** hashing), sensitive credentials encrypted at rest in SQLite via **AES-256-GCM**, and strict environment validation with zero silent fallbacks.
   - **Zero-Disk-Secret Backup (GFS + OpenGPG):** Hot SQLite snapshots with *Grandfather-Father-Son* retention, asymmetric OpenGPG encryption keeping only the public key on the server, and automated sync to any **S3-compatible Object Storage** (AWS S3, Cloudflare R2, MinIO, etc.).
 
+### [Anker C200 Control | Native Linux GUI for the Anker PowerConf C200 Webcam](https://github.com/daviroodrigues/anker-c200-ui)
+*Desktop application built with Tauri, Rust, and C11 bringing full feature parity with the vendor's official software to Linux, combining direct V4L2/UVC hardware control with real-time video preview.*
+- **Stack:** Rust, C11 (V4L2 / UVC), Tauri, HTML5, CSS3, JavaScript (ES6+), WebRTC, Linux.
+- **Engineering & Architectural Decisions:**
+  - **C11 Driver Layer + Rust FFI:** Low-level mapping of UVC *Extension Units* and direct `ioctl` calls on `/dev/video*` linked to the **Tauri/Rust** core via `cc`, expanding the controls from the base [`anker-powerconf-c200-linux-tools`](https://github.com/erans/anker-powerconf-c200-linux-tools) project through USB traffic analysis.
+  - **IPC Command Queue & Bidirectional Sync:** Serialized front-end/backend command execution to prevent kernel driver race conditions, initial hardware state sync (`get_camera_control`), and automatic dependency handling between auto and manual controls.
+  - **Lightweight Vanilla UI & WebRTC Live Preview:** Zero-framework front-end featuring real-time `getUserMedia` preview, digital ePTZ controls, FOV/resolution presets (up to 2K), and native Linux packaging (`.deb` and `AppImage`).
+
 ### Linux Infrastructure, Containers & Edge Security
 *Server provisioning, isolation, and operations for web applications and APIs.*
 - **Stack:** Linux (Ubuntu), Docker (Rootless), Cloudflare, AWS (S3).
@@ -49,9 +57,12 @@
 
 ### Languages & Frameworks
 ![Go](https://img.shields.io/badge/Go-00ADD8?logo=Go&logoColor=white&style=for-the-badge)
+![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
+![C](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
 ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![Tauri](https://img.shields.io/badge/Tauri-24C8D8?style=for-the-badge&logo=tauri&logoColor=white)
 ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
 ![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)

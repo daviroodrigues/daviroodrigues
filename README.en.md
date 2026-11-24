@@ -1,43 +1,80 @@
-[![Portuguese](https://img.shields.io/badge/🇧🇷-Portuguese-green?style=flat-square)](https://github.com/daviroodrigues/daviroodrigues/blob/main/README.md)
+<div align="right">
 
-[![Typing SVG](https://typingsvg.vercel.app/api/svg?width=600&height=45&pause=500&backgroundOpacity=0&center=false&vCenter=false&border=false&cursorStyle=underline&lines=%5B%7B%22text%22%3A%22If+you+got+here+you+probably+know+who+I+am%22%2C%22font%22%3A%22Ubuntu+Mono%22%2C%22color%22%3A%22%23810404%22%2C%22fontSize%22%3A22%2C%22typingSpeed%22%3A0.06666666666666667%2C%22deleteSpeed%22%3A0.05%2C%22fontWeight%22%3A%22500%22%7D%2C%7B%22text%22%3A%22But+in+case+you+don't%22%2C%22font%22%3A%22Ubuntu+Mono%22%2C%22color%22%3A%22%23810404%22%2C%22fontSize%22%3A22%2C%22typingSpeed%22%3A0.06666666666666667%2C%22deleteSpeed%22%3A0.05%2C%22fontWeight%22%3A%22500%22%7D%2C%7B%22text%22%3A%22I'm+Davi.+Nice+to+meet+you!%22%2C%22font%22%3A%22Ubuntu+Mono%22%2C%22color%22%3A%22%23810404%22%2C%22fontSize%22%3A23%2C%22typingSpeed%22%3A0.06666666666666667%2C%22deleteSpeed%22%3A0.05%2C%22fontWeight%22%3A%22500%22%7D%5D)](https://github.com/whiteSHADOW1234/TypingSVG)
+[![Portuguese](https://img.shields.io/badge/Language-Portuguese-green?style=flat-square)](https://github.com/daviroodrigues/daviroodrigues/blob/main/README.md)
 
-## About me
+</div>
 
-- Focused on end-to-end development: from front-end to infrastructure.
-- Interested in hardware, high-performance systems, and literature.
-- Open to discussions about new technologies and software architectures.
+# Davi Rodrigues
+### Full-Stack Developer | Go (Backend & Distributed Systems) • Front-end / Mobile • Infrastructure & Security
 
-## Technologies and Tools
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/daviroodrigues/)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:daviroodrigues@gmail.com)
+[![X](https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white)](https://twitter.com/daviroodriguess)
 
-### Languages and Frameworks
+**Full-Stack** Developer focused on **Go backend architecture**, **event-driven distributed systems**, and **production Linux infrastructure with containers**, alongside **web and mobile interface** development. Hands-on experience from data modeling and asynchronous pipelines to edge-isolated deployments, applied cryptography, and operational resilience.
+
+---
+
+## Projects & Technical Deliverables
+
+### [Esmaga Link | Distributed URL Shortener & Telemetry API](https://github.com/daviroodrigues/esmaga-link)
+*High-concurrency backend platform designed under event-driven architecture and CQRS, sustaining redirects at **P99 < 50 ms** latency.*
+- **Stack:** Go, Apache Cassandra, Redis, PostgreSQL, RabbitMQ, Nginx, Docker.
+- **Engineering & Architectural Decisions:**
+  - **Collision-Free O(1) ID Generation:** Deterministic modular bijection over a finite ring with progressive eras, eliminating distributed locks and prior uniqueness lookups.
+  - **Stateless Horizontal Scaling:** Sequence block allocation via *Batch Leasing* in **Redis** paired with in-memory atomic counters (`sync/atomic`) and intra-batch permutation.
+  - **Hot Path vs. Cold Path Isolation:** `302` redirects (*zero body allocation*) served through a two-tier cache (in-memory L1 + **Redis** L2) with **Cassandra** as the *Single Source of Truth*, while click events are ingested in micro-batches via **RabbitMQ** by dedicated *workers*.
+  - **Resilience & Edge Security:** State self-recovery via Cassandra checkpoints using LWT (Paxos), SSRF protection with DNS validation, distributed *Rate Limiting* (*Token Bucket* via Redis Lua scripts), JWT authentication, and **Swagger** documentation.
+
+### [ChatNip | Multi-Tenant WhatsApp Gateway & Queue-Driven Dispatcher](https://github.com/daviroodrigues/ChatNip)
+*Modular Go infrastructure built on `whatsmeow` to integrate ERPs, CRMs, and automations with WhatsApp featuring egress isolation, behavioral emulation, and an asynchronous pipeline.*
+- **Stack:** Go, RabbitMQ (AMQP), SQLite, Nginx, Docker, FFmpeg, OpenGPG, S3-compatible Object Storage.
+- **Engineering & Architectural Decisions:**
+  - **Behavioral Bio-Emulation (HSEM v3.1) & Virtual Sub-Queues:** Presence state machine (`DORMANT` → `WARMING UP` → `ACTIVE FLOW` → `COOL DOWN`) combined with per-recipient Virtual Sub-Queues (VSQ) to serialize interactions and simulate human cadence, mitigating ban risks.
+  - **Single-Edge Perimeter & Per-Session Isolation:** Only **Nginx** exposes host ports while all other services run inside an isolated Docker network; each session requires a **dedicated HTTP/HTTPS proxy** with runtime validation and rotation support, preventing shared IP reputation.
+  - **Prioritized AMQP Messaging & DLQ:** Dedicated queues for low-latency (`whatsapp_fast_lane`) and standard (`whatsapp_standard_lane`) traffic, asynchronous group creation, a *Dead Letter Exchange* (`whatsapp_dlx`), and granular event dispatching for delivery, read receipts, presence, and calls.
+  - **Security, Cryptography & Fail-Fast Startup:** Separation between master admin key (`X-Internal-Key`) and client keys (`X-API-Key`, shown once and stored with **Argon2id** hashing), sensitive credentials encrypted at rest in SQLite via **AES-256-GCM**, and strict environment validation with zero silent fallbacks.
+  - **Zero-Disk-Secret Backup (GFS + OpenGPG):** Hot SQLite snapshots with *Grandfather-Father-Son* retention, asymmetric OpenGPG encryption keeping only the public key on the server, and automated sync to any **S3-compatible Object Storage** (AWS S3, Cloudflare R2, MinIO, etc.).
+
+### Linux Infrastructure, Containers & Edge Security
+*Server provisioning, isolation, and operations for web applications and APIs.*
+- **Stack:** Linux (Ubuntu), Docker (Rootless), Cloudflare, AWS (S3).
+- **Deliverables:**
+  - Service deployment and orchestration on **Ubuntu** VPS servers using **rootless Docker** for process isolation and attack surface reduction.
+  - DNS, reverse proxy, SSL/TLS certificates, and edge protection via **Cloudflare**, along with object storage on **Amazon S3**.
+
+---
+
+## Tech Stack
+
+### Languages & Frameworks
 ![Go](https://img.shields.io/badge/Go-00ADD8?logo=Go&logoColor=white&style=for-the-badge)
-![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
-![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
 ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
-### Databases
+### Data, Cache & Messaging
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 ![Cassandra](https://img.shields.io/badge/Cassandra-%231287B1.svg?style=for-the-badge&logo=apache-cassandra&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
-![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
-
-### Infrastructure and Tools
-![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![RabbitMQ](https://img.shields.io/badge/Rabbitmq-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white)
-![Amazon S3](https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)
-![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=black)
+
+### Infrastructure, Cloud & Edge
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-web-services&logoColor=white)
+![Amazon S3](https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)
+
+### APIs, Design & Tooling
+![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=black)
 ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
-
-## Contact
-
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:daviroodrigues@gmail.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/daviroodrigues/)
-[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/daviroodriguess)
